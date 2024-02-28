@@ -1,0 +1,13 @@
+<root BTCPP_format="4" >
+  <BehaviorTree ID="MainTree">
+    <Fallback name="root_fallback">
+      <Sequence name="main_behavior">
+        <Fallback name="goal_pose_fallback">
+          <CheckPose name="check_pose"/>
+          <BaseToGoal name="base_to_goal"/>
+        </Fallback>
+      </Sequence>
+      <AskForHelp name="ask_for_help"/>
+    </Fallback>
+  </BehaviorTree>
+</root>
