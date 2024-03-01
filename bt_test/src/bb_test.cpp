@@ -20,16 +20,17 @@ namespace BT
 {
     template <> inline geometry_msgs::PoseStamped convertFromString(StringView str)
     {
-        // We expect real numbers separated by commas
-        auto parts = splitString(str, ',');
-        if (parts.size() != 2)
+        // We expect real numbers separated by semicolons
+        auto parts = splitString(str, ';');
+        if (parts.size() != 8)
         {
             throw RuntimeError("invalid input)");
         }
         else
         {
             geometry_msgs::PoseStamped output;
-            output.header.frame_id        = convertFromString<char>(parts[0]);
+            //output.header.frame_id        = convertFromString<char>(parts[0]);
+            output.header.frame_id        = convertFromString<std::string>(parts[0]);
             output.pose.position.x        = convertFromString<double>(parts[1]);
             output.pose.position.y        = convertFromString<double>(parts[2]);
             output.pose.position.z        = convertFromString<double>(parts[3]);
@@ -71,6 +72,7 @@ public:
         pose.pose.orientation.w     = 1.0;
 
       setOutput<geometry_msgs::PoseStamped>("home", pose);
+
       return BT::NodeStatus::SUCCESS;
     }
 };
@@ -97,6 +99,7 @@ class PrintTargetPose: public BT::SyncActionNode
       }
 
       geometry_msgs::PoseStamped target = res.value();
+      ROS_INFO_STREAM("Header: " + target.header.frame_id);
       printf("Target positions: [ %.1f, %.1f , %.1f ]\n", target.pose.position.x, target.pose.position.y, target.pose.position.z);
 
       return BT::NodeStatus::SUCCESS;
