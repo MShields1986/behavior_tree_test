@@ -3,7 +3,7 @@
     <Fallback name="root_fallback">
       <Sequence name="main_behavior">
         <Fallback name="goal_pose_fallback">
-          <CheckPose name="check_pose"/>
+          <CheckPose name="check_pose" fixture_1_base_location="[1, 0, 0]"/>
           <BaseToGoal name="base_to_goal"/>
         </Fallback>
       </Sequence>

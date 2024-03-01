@@ -177,6 +177,9 @@ target_link_libraries(bt_test_complex ${catkin_LIBRARIES})
 add_executable(tree src/tree.cpp ${BT_NODES_SRC})
 target_link_libraries(tree ${catkin_LIBRARIES})
 
+add_executable(bb_test src/bb_test.cpp)
+target_link_libraries(bb_test ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############

@@ -51,7 +51,7 @@ public:
 
 // Approach ball sub-tree
 //   Condition leaf node
-BT::NodeStatus ballClose(BT::TreeNode &self)
+BT::NodeStatus ballClose(BT::TreeNode& self)
 {
   // Read port
   BT::Optional<std::vector<int>> msg = self.getInput<std::vector<int>>("ball_location");
@@ -63,10 +63,17 @@ BT::NodeStatus ballClose(BT::TreeNode &self)
 
   ROS_INFO_STREAM("Positions from blackboard:");
 
+  /*
   for (const auto position : msg.value())
   {
     ROS_INFO_STREAM(position);
   }
+  */
+  ROS_INFO_STREAM("----------------------------");
+  ROS_INFO_STREAM(msg.value()[0]);
+  ROS_INFO_STREAM(msg.value()[1]);
+  ROS_INFO_STREAM(msg.value()[2]);
+  ROS_INFO_STREAM("----------------------------");
 
   ROS_INFO_STREAM("Ball not close");
   return BT::NodeStatus::FAILURE;

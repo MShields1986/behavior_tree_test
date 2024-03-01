@@ -21,6 +21,6 @@ class BaseToGoal : public BT::AsyncActionNode
     BT::NodeStatus sendGoal();
 
     MoveBaseClient _actionclient;
-    move_base_msgs::MoveBaseGoal goal;
+    move_base_msgs::MoveBaseGoal m_goal;
 
 };

@@ -33,9 +33,17 @@ bool rot_ok(double a, double b)
 
 
 // Adapting a pre-existing function
-BT::NodeStatus CheckPose()
+BT::NodeStatus CheckPose(BT::TreeNode& self)
 {
-    ROS_INFO_STREAM("Checking Pose...");
+    // Read goal pose from port
+    BT::Optional<std::vector<double>> msg = self.getInput<std::vector<double>>("fixture_1_base_location");
+
+    if (!msg)
+    {
+        throw BT::RuntimeError("Missing required input[fixture_1_base_location]: ", msg.error());
+    }
+
+    ROS_INFO_STREAM("Checking Pose x: " << msg.value()[0] << " y: " << msg.value()[1] << " z: " << msg.value()[2]);
 
     // TODO: Be good to get the instantiation out of here
     tf2_ros::Buffer tfBuffer;
@@ -48,9 +56,9 @@ BT::NodeStatus CheckPose()
         ROS_INFO_STREAM("Current pose...");
         ROS_INFO_STREAM(transformStamped);
 
-        if (pose_ok(transformStamped.transform.translation.x, 1.0) &&
-            pose_ok(transformStamped.transform.translation.y, 0.0) &&
-            pose_ok(transformStamped.transform.translation.z, 0.0) &&
+        if (pose_ok(transformStamped.transform.translation.x, msg.value()[0]) &&
+            pose_ok(transformStamped.transform.translation.y, msg.value()[1]) &&
+            pose_ok(transformStamped.transform.translation.z, msg.value()[2]) &&
             rot_ok(transformStamped.transform.rotation.z, 0.0) &&
             rot_ok(transformStamped.transform.rotation.w, 1.0))
         {
@@ -69,6 +77,7 @@ BT::NodeStatus CheckPose()
     }
 
 }
+
 
 
 // Human fallback sub-tree
@@ -102,10 +111,12 @@ int main(int argc, char **argv)
 
   BT::BehaviorTreeFactory factory;
 
+  BT::PortsList ports = {BT::InputPort<std::vector<double>>("fixture_1_base_location")};
+
   // Register leaf nodes
   factory.registerNodeType<AskForHelp>("AskForHelp");
   //factory.registerNodeType<CheckPose>("CheckPose");
-  factory.registerSimpleCondition("CheckPose", std::bind(CheckPose));
+  factory.registerSimpleCondition("CheckPose", CheckPose, ports);
   factory.registerNodeType<BaseToGoal>("BaseToGoal");
 
   // Create Tree

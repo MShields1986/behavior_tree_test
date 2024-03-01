@@ -5,10 +5,10 @@ BaseToGoal::BaseToGoal(const std::string& name, const BT::NodeConfiguration& con
       BT::AsyncActionNode(name, config),
       _actionclient("/kmr/move_base", true)
 {
-  while(!_actionclient.waitForServer(ros::Duration(5.0)))
+  /*while(!_actionclient.waitForServer(ros::Duration(5.0)))
   {
     ROS_INFO_STREAM("Waiting for the move_base action server to come up");
-  }
+  }*/
   ROS_INFO_STREAM("move_base action server up");
 }
 
@@ -38,12 +38,12 @@ void BaseToGoal::setGoal()
     ROS_INFO_STREAM(position);
   }
   */
-  this->goal.target_pose.header.frame_id = "map";
-  this->goal.target_pose.header.stamp = ros::Time::now();
-  this->goal.target_pose.pose.position.x = 1.0;
-  this->goal.target_pose.pose.position.y = 0.0;
-  this->goal.target_pose.pose.orientation.z = 0.0;
-  this->goal.target_pose.pose.orientation.w = 1.0;
+  m_goal.target_pose.header.frame_id = "map";
+  m_goal.target_pose.header.stamp = ros::Time::now();
+  m_goal.target_pose.pose.position.x = 1.0;
+  m_goal.target_pose.pose.position.y = 0.0;
+  m_goal.target_pose.pose.orientation.z = 0.0;
+  m_goal.target_pose.pose.orientation.w = 1.0;
 
   ROS_INFO_STREAM("Goal set");
 }
@@ -59,8 +59,8 @@ void BaseToGoal::haltGoal()
 BT::NodeStatus BaseToGoal::sendGoal()
   {
     ROS_INFO_STREAM("Sending goal");
-    _actionclient.sendGoal(this->goal);
-    //_actionclient.sendGoal(this->goal, &doneCb, &activeCb, &feedbackCb);
+    _actionclient.sendGoal(m_goal);
+    //_actionclient.sendGoal(m_goal, &doneCb, &activeCb, &feedbackCb);
     ROS_INFO_STREAM("Goal sent");
 
     _actionclient.waitForResult();
@@ -102,6 +102,6 @@ BT::NodeStatus BaseToGoal::tick()
   }
   */
 
-  this->setGoal();
-  return this->sendGoal();
+  setGoal();
+  return sendGoal();
 }
