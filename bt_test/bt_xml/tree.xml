@@ -4,7 +4,8 @@
       <Sequence name="main_behavior">
         <Fallback name="goal_pose_fallback">
           <CheckPose name="check_pose" fixture_1_base_location="[1, 0, 0]"/>
-          <BaseToGoal name="base_to_goal"/>
+          <!--<BaseToGoal name="base_to_goal"/>-->
+          <TfToPose name="tf_to_pose" frame_id="base_link" pose="{fixture_base_loc}"/>
         </Fallback>
       </Sequence>
       <AskForHelp name="ask_for_help"/>

@@ -15,12 +15,12 @@
 using namespace std::chrono_literals;
 
 
-// Template specialization to converts a string to Position2D.
+// Template specialization to converts a string to PoseStamped
 namespace BT
 {
     template <> inline geometry_msgs::PoseStamped convertFromString(StringView str)
     {
-        // We expect real numbers separated by semicolons
+        // We expect a frame_id real numbers separated by semicolons
         auto parts = splitString(str, ';');
         if (parts.size() != 8)
         {
@@ -29,7 +29,6 @@ namespace BT
         else
         {
             geometry_msgs::PoseStamped output;
-            //output.header.frame_id        = convertFromString<char>(parts[0]);
             output.header.frame_id        = convertFromString<std::string>(parts[0]);
             output.pose.position.x        = convertFromString<double>(parts[1]);
             output.pose.position.y        = convertFromString<double>(parts[2]);

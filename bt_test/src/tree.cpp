@@ -10,6 +10,7 @@
 #include "behaviortree_cpp_v3/loggers/bt_zmq_publisher.h"
 
 #include "bt_move_base_action_leaf_node.h"
+#include "bt_tf_to_pose_action_leaf_node.h"
 
 
 using namespace std::chrono_literals;
@@ -118,6 +119,7 @@ int main(int argc, char **argv)
   //factory.registerNodeType<CheckPose>("CheckPose");
   factory.registerSimpleCondition("CheckPose", CheckPose, ports);
   factory.registerNodeType<BaseToGoal>("BaseToGoal");
+  factory.registerNodeType<TfToPose>("TfToPose");
 
   // Create Tree
   auto tree = factory.createTreeFromFile(file_path);

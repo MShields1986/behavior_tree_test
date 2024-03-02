@@ -1,9 +1,11 @@
 <root BTCPP_format="4" >
    <BehaviorTree ID="MainTree">
       <Sequence name="root">
+          <SetBlackboard     output_key="home_position" value="base_link;3;2;1;0;0;0;1" />
+          <PrintTargetPose   target="{home_position}" />
           <GetHomePose       home="{home_position}" />
           <PrintTargetPose   target="{home_position}" />
-          <SetBlackboard     output_key="move_goal" value="base_link;1;1;1;0;0;0;1" />
+          <SetBlackboard     output_key="move_goal" value="base_link;1;2;3;0;0;0;1" />
           <PrintTargetPose   target="{move_goal}" />
       </Sequence>
    </BehaviorTree>
