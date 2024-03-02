@@ -2,7 +2,8 @@
 
 
 TfToPose::TfToPose(const std::string& name, const BT::NodeConfiguration& config) : 
-      BT::SyncActionNode(name, config)
+      BT::SyncActionNode(name, config),
+      m_tfListener(m_tfBuffer)
 {
 }
 
@@ -18,43 +19,37 @@ BT::PortsList TfToPose::providedPorts()
 
 BT::NodeStatus TfToPose::tick()
 {
-  BT::Optional<std::string> msg = getInput<std::string>("frame_id");
+  auto res = getInput<std::string>("frame_id");
 
-  if (!msg)
+  if (!res)
   {
-    throw BT::RuntimeError("Missing required input[frame_id]: ", msg.error());
+    throw BT::RuntimeError("TfToPose | error reading port [frame_id]: ", res.error());
     return BT::NodeStatus::FAILURE;
   }
 
-  std::string frame_id = msg.value();
-
-  // TODO: Be good to get the instantiation out of here
-  tf2_ros::Buffer tfBuffer;
-  tf2_ros::TransformListener tfListener(tfBuffer);
-  geometry_msgs::TransformStamped transformStamped;
+  m_frame_id = res.value();
 
   try{
-      transformStamped = tfBuffer.lookupTransform("map", frame_id, ros::Time(0), ros::Duration(3.0));
-      ROS_INFO_STREAM("Current pose...");
-      ROS_INFO_STREAM(transformStamped);
+      m_transformStamped = m_tfBuffer.lookupTransform("map", m_frame_id, ros::Time(0), ros::Duration(3.0));
       }
   catch (tf2::TransformException &ex) {
-      ROS_INFO_STREAM("Could not find transform map to " + frame_id + ": " + ex.what());
+      ROS_INFO_STREAM("TfToPose | could not find transform map to " + m_frame_id + ": " + ex.what());
       return BT::NodeStatus::FAILURE;
   }
 
   geometry_msgs::PoseStamped pose;
-  pose.header.stamp           = ros::Time::now();
-  pose.header.frame_id        = frame_id;
-  pose.pose.position.x        = transformStamped.transform.translation.x;
-  pose.pose.position.y        = transformStamped.transform.translation.y;
-  pose.pose.position.z        = transformStamped.transform.translation.z;
-  pose.pose.orientation.x     = transformStamped.transform.rotation.x;
-  pose.pose.orientation.y     = transformStamped.transform.rotation.y;
-  pose.pose.orientation.z     = transformStamped.transform.rotation.z;
-  pose.pose.orientation.w     = transformStamped.transform.rotation.w;
+  //pose.header.stamp           = ros::Time::now();
+  pose.header.frame_id        = "map";
+  pose.pose.position.x        = m_transformStamped.transform.translation.x;
+  pose.pose.position.y        = m_transformStamped.transform.translation.y;
+  pose.pose.position.z        = m_transformStamped.transform.translation.z;
+  pose.pose.orientation.x     = m_transformStamped.transform.rotation.x;
+  pose.pose.orientation.y     = m_transformStamped.transform.rotation.y;
+  pose.pose.orientation.z     = m_transformStamped.transform.rotation.z;
+  pose.pose.orientation.w     = m_transformStamped.transform.rotation.w;
 
   setOutput<geometry_msgs::PoseStamped>("pose", pose);
+  ROS_INFO_STREAM("TfToPose | pose output: " << pose);
 
   return BT::NodeStatus::SUCCESS;
 }

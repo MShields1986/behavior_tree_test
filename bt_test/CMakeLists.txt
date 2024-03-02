@@ -163,7 +163,6 @@ include_directories(
 set(BT_NODES_SRC
     src/bt_move_base_action_leaf_node.cpp
     src/bt_tf_to_pose_action_leaf_node.cpp
-    src/posestamped_bb_parser.cpp
 )
 
 

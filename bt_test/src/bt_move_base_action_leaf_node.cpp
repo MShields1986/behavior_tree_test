@@ -1,6 +1,7 @@
 #include "bt_move_base_action_leaf_node.h"
 
 
+
 BaseToGoal::BaseToGoal(const std::string& name, const BT::NodeConfiguration& config) : 
       BT::AsyncActionNode(name, config),
       _actionclient("/kmr/move_base", true)
@@ -9,67 +10,49 @@ BaseToGoal::BaseToGoal(const std::string& name, const BT::NodeConfiguration& con
   {
     ROS_INFO_STREAM("Waiting for the move_base action server to come up");
   }*/
-  ROS_INFO_STREAM("move_base action server up");
+  ROS_INFO_STREAM("BaseToGoal | move_base action server up");
 }
 
 
 BT::PortsList BaseToGoal::providedPorts()
 {
-  return {BT::InputPort<std::vector<int>>("goal_pose")};
+  return {BT::InputPort<geometry_msgs::PoseStamped>("pose")};
 }
 
 
 void BaseToGoal::setGoal()
 {
-  ROS_INFO_STREAM("Setting goal");
-  /*
-  // TODO: Read port or topic for goal_pose
-  BT::Optional<std::vector<int>> msg = getInput<std::vector<int>>("goal_pose");
-
-  if (!msg)
-  {
-    throw BT::RuntimeError("Missing required input[goal_pose]: ", msg.error());
-  }
-
-  ROS_INFO_STREAM("goal_pose from blackboard:");
-
-  for (const auto position : msg.value())
-  {
-    ROS_INFO_STREAM(position);
-  }
-  */
-  m_goal.target_pose.header.frame_id = "map";
+  m_goal.target_pose.header.frame_id = m_pose.header.frame_id;
   m_goal.target_pose.header.stamp = ros::Time::now();
-  m_goal.target_pose.pose.position.x = 1.0;
-  m_goal.target_pose.pose.position.y = 0.0;
-  m_goal.target_pose.pose.orientation.z = 0.0;
-  m_goal.target_pose.pose.orientation.w = 1.0;
-
-  ROS_INFO_STREAM("Goal set");
+  m_goal.target_pose.pose.position.x = m_pose.pose.position.x;
+  m_goal.target_pose.pose.position.y = m_pose.pose.position.y;
+  m_goal.target_pose.pose.orientation.z = m_pose.pose.orientation.z;
+  m_goal.target_pose.pose.orientation.w = m_pose.pose.orientation.w;
+  ROS_INFO_STREAM("BaseToGoal | goal set to " << m_goal.target_pose);
 }
 
 
 void BaseToGoal::haltGoal()
   {
     _actionclient.cancelGoal();
-    ROS_INFO_STREAM("move_base goal cancelled");
+    ROS_INFO_STREAM("BaseToGoal | move_base goal cancelled");
   }
 
 
 BT::NodeStatus BaseToGoal::sendGoal()
   {
-    ROS_INFO_STREAM("Sending goal");
+    ROS_INFO_STREAM("BaseToGoal | sending goal");
     _actionclient.sendGoal(m_goal);
     //_actionclient.sendGoal(m_goal, &doneCb, &activeCb, &feedbackCb);
-    ROS_INFO_STREAM("Goal sent");
+    ROS_INFO_STREAM("BaseToGoal | goal sent");
 
     _actionclient.waitForResult();
 
     if (_actionclient.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
-      ROS_INFO_STREAM("move_base goal succeeded");
+      ROS_INFO_STREAM("BaseToGoal | move_base goal succeeded");
       return BT::NodeStatus::SUCCESS;
     } else {
-      ROS_INFO_STREAM("move_base goal failed");
+      ROS_INFO_STREAM("BaseToGoal | move_base goal failed");
       return BT::NodeStatus::FAILURE;
     }
   }
@@ -84,23 +67,16 @@ BaseToGoal::feedbackCb(const MoveBaseFeedbackConstPtr& feedback)
 // SyncActionNode only return success or failure as they are blocking so this one is AsyncActionNode
 BT::NodeStatus BaseToGoal::tick()
 {
-  ROS_INFO_STREAM("BaseToGoal got ticked!");
-  /*
-  // Read port
-  BT::Optional<std::vector<int>> msg = getInput<std::vector<int>>("goal_pose");
-
-  if (!msg)
+  auto res = getInput<geometry_msgs::PoseStamped>("pose");
+ 
+  if( !res )
   {
-    throw BT::RuntimeError("Missing required input[goal_pose]: ", msg.error());
+    throw BT::RuntimeError("BaseToGoal | error reading port [pose]:", res.error());
     return BT::NodeStatus::FAILURE;
   }
-  ROS_INFO_STREAM("goal_pose from blackboard:");
 
-  for (const auto position : msg.value())
-  {
-    ROS_INFO_STREAM(position);
-  }
-  */
+  m_pose = res.value();
+  ROS_INFO_STREAM("BaseToGoal | pose input: " << m_pose);
 
   setGoal();
   return sendGoal();

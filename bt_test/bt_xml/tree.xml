@@ -2,11 +2,18 @@
   <BehaviorTree ID="MainTree">
     <Fallback name="root_fallback">
       <Sequence name="main_behavior">
-        <Fallback name="goal_pose_fallback">
-          <CheckPose name="check_pose" fixture_1_base_location="[1, 0, 0]"/>
-          <!--<BaseToGoal name="base_to_goal"/>-->
-          <TfToPose name="tf_to_pose" frame_id="base_link" pose="{fixture_base_loc}"/>
+        <SetBlackboard output_key="home_base_loc" value="map;0;0;0;0;0;0;1" />
+        <Fallback name="go_to_home_fallback">
+          <CheckPose name="check_pose" pose="{home_base_loc}"/>
+          <BaseToGoal name="base_to_home" pose="{home_base_loc}"/>
         </Fallback>
+        <Sequence name="go_to_fixture_sequence">
+          <TfToPose name="tf_to_pose" frame_id="fixture_1" pose="{fixture_base_loc}"/>
+          <Fallback name="go_to_fixture_fallback">
+            <CheckPose name="check_pose" pose="{fixture_base_loc}"/>
+            <BaseToGoal name="base_to_fixture" pose="{fixture_base_loc}"/>
+          </Fallback>
+        </Sequence>
       </Sequence>
       <AskForHelp name="ask_for_help"/>
     </Fallback>

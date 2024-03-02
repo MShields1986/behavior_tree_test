@@ -1,3 +1,5 @@
+#pragma once
+
 #include "geometry_msgs/PoseStamped.h"
 #include "behaviortree_cpp_v3/action_node.h"
 

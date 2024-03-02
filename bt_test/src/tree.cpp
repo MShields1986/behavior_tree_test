@@ -4,6 +4,7 @@
 #include "ros/package.h"
 #include "tf2_ros/transform_listener.h"
 #include "geometry_msgs/TransformStamped.h"
+#include "geometry_msgs/PoseStamped.h"
 
 #include "behaviortree_cpp_v3/bt_factory.h"
 #include "behaviortree_cpp_v3/loggers/bt_cout_logger.h"
@@ -11,6 +12,7 @@
 
 #include "bt_move_base_action_leaf_node.h"
 #include "bt_tf_to_pose_action_leaf_node.h"
+#include "posestamped_bb_parser.h"
 
 
 using namespace std::chrono_literals;
@@ -36,15 +38,14 @@ bool rot_ok(double a, double b)
 // Adapting a pre-existing function
 BT::NodeStatus CheckPose(BT::TreeNode& self)
 {
-    // Read goal pose from port
-    BT::Optional<std::vector<double>> msg = self.getInput<std::vector<double>>("fixture_1_base_location");
-
-    if (!msg)
+    auto res = self.getInput<geometry_msgs::PoseStamped>("pose");
+    if( !res )
     {
-        throw BT::RuntimeError("Missing required input[fixture_1_base_location]: ", msg.error());
+        throw BT::RuntimeError("CheckPose | error reading port [pose]:", res.error());
     }
 
-    ROS_INFO_STREAM("Checking Pose x: " << msg.value()[0] << " y: " << msg.value()[1] << " z: " << msg.value()[2]);
+    geometry_msgs::PoseStamped pose = res.value();
+    ROS_INFO_STREAM("CheckPose | pose input: " << pose);
 
     // TODO: Be good to get the instantiation out of here
     tf2_ros::Buffer tfBuffer;
@@ -54,26 +55,26 @@ BT::NodeStatus CheckPose(BT::TreeNode& self)
     try{
         transformStamped = tfBuffer.lookupTransform("map", "base_link", ros::Time(0), ros::Duration(3.0));
         //transformStamped = tfBuffer.lookupTransform("map", "base_link", ros::Time::now(), ros::Duration(3.0));
-        ROS_INFO_STREAM("Current pose...");
-        ROS_INFO_STREAM(transformStamped);
 
-        if (pose_ok(transformStamped.transform.translation.x, msg.value()[0]) &&
-            pose_ok(transformStamped.transform.translation.y, msg.value()[1]) &&
-            pose_ok(transformStamped.transform.translation.z, msg.value()[2]) &&
-            rot_ok(transformStamped.transform.rotation.z, 0.0) &&
-            rot_ok(transformStamped.transform.rotation.w, 1.0))
+        if (pose_ok(transformStamped.transform.translation.x, pose.pose.position.x) &&
+            pose_ok(transformStamped.transform.translation.y, pose.pose.position.y) &&
+            pose_ok(transformStamped.transform.translation.z, pose.pose.position.z) &&
+            rot_ok(transformStamped.transform.rotation.x, pose.pose.orientation.x) &&
+            rot_ok(transformStamped.transform.rotation.y, pose.pose.orientation.y) &&
+            rot_ok(transformStamped.transform.rotation.z, pose.pose.orientation.z) &&
+            rot_ok(transformStamped.transform.rotation.w, pose.pose.orientation.w))
         {
-            ROS_INFO_STREAM("Pose OK");
+            ROS_INFO_STREAM("CheckPose | pose OK");
             return BT::NodeStatus::SUCCESS;
         }
         else
         {
-            ROS_INFO_STREAM("Pose NOK");
+            ROS_INFO_STREAM("CheckPose | pose NOK");
             return BT::NodeStatus::FAILURE;
         }
     }
     catch (tf2::TransformException &ex) {
-        ROS_WARN("Could NOT transform map to base_link: %s", ex.what());
+        ROS_WARN("CheckPose | could not transform map to base_link: %s", ex.what());
         return BT::NodeStatus::FAILURE;
     }
 
@@ -112,7 +113,7 @@ int main(int argc, char **argv)
 
   BT::BehaviorTreeFactory factory;
 
-  BT::PortsList ports = {BT::InputPort<std::vector<double>>("fixture_1_base_location")};
+  BT::PortsList ports = {BT::InputPort<geometry_msgs::PoseStamped>("pose")};
 
   // Register leaf nodes
   factory.registerNodeType<AskForHelp>("AskForHelp");
