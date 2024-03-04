@@ -1,0 +1,8 @@
+<root BTCPP_format="4" >
+  <BehaviorTree ID="3dScan">
+    <Sequence name="3d_scan_behavior">
+      <PlanViews name="view_plan"/>
+      <ArmMoveItCommander name="arm_to_views" pose_array_topic_name="/planner_views"/>
+    </Sequence>
+  </BehaviorTree>
+</root>

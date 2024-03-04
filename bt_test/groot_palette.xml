@@ -1,0 +1,16 @@
+<root>
+    <TreeNodesModel>
+        <Action ID="AskForHelp"/>
+        <Action ID="BaseToGoal">
+            <input_port name="pose"/>
+        </Action>
+        <Condition ID="CheckPose">
+            <input_port name="pose"/>
+        </Condition>
+        <Action ID="TfToPose">
+            <input_port name="frame_id"/>
+            <output_port name="pose"/>
+        </Action>
+    </TreeNodesModel>
+</root>
+

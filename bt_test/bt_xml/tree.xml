@@ -1,17 +1,16 @@
 <root BTCPP_format="4" >
   <include path="./home.xml" />
+  <include path="./go_to_fixture.xml" />
+  <!--<include path="./3d_scan.xml" />-->
 
   <BehaviorTree ID="MainTree">
     <Fallback name="root_fallback">
       <Sequence name="main_behavior">
         <SubTree ID="Home" />
-        <Sequence name="base_to_fixture_sequence">
-          <TfToPose name="tf_to_pose" frame_id="fixture_1" pose="{fixture_base_loc}"/>
-          <Fallback name="base_to_fixture_fallback">
-            <CheckPose name="base_check_fixture" pose="{fixture_base_loc}"/>
-            <BaseToGoal name="base_to_fixture" pose="{fixture_base_loc}"/>
-          </Fallback>
-        </Sequence>
+        <!--<SetBlackboard output_key="arm_home_loc_joint" value="0;0;0;0;0;0;0" />-->
+        <!--<ArmToGoal name="arm_to_transit" pose="{arm_transit_loc_joint}"/>-->
+        <SubTree ID="GoToFixture" />
+        <!--<SubTree ID="3DScan" />-->
       </Sequence>
       <AskForHelp name="ask_for_help"/>
     </Fallback>

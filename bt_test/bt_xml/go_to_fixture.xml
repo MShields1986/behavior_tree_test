@@ -1,0 +1,11 @@
+<root BTCPP_format="4" >
+  <BehaviorTree ID="GoToFixture">
+    <Sequence name="go_to_fixture_behavior">
+      <TfToPose name="tf_to_pose" frame_id="fixture_1" pose="{fixture_base_loc}"/>
+      <Fallback name="base_to_fixture_fallback">
+        <CheckPose name="base_check_fixture" pose="{fixture_base_loc}"/>
+        <BaseToGoal name="base_to_fixture" pose="{fixture_base_loc}"/>
+      </Fallback>
+    </Sequence>
+  </BehaviorTree>
+</root>
