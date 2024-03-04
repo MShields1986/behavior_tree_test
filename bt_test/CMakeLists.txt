@@ -159,27 +159,30 @@ include_directories(
 #   ${catkin_LIBRARIES}
 # )
 
+#####################################
+# Tests
+#####################################
+
+#add_executable(bt_test src/bt_test.cpp)
+#target_link_libraries(bt_test ${catkin_LIBRARIES})
+
+#add_executable(bt_test_complex src/bt_test_complex.cpp)
+#target_link_libraries(bt_test_complex ${catkin_LIBRARIES})
+
+#add_executable(bb_test src/bb_test.cpp)
+#target_link_libraries(bb_test ${catkin_LIBRARIES})
+
+#####################################
+# Tree
+#####################################
 
 set(BT_NODES_SRC
     src/bt_move_base_action_leaf_node.cpp
     src/bt_tf_to_pose_action_leaf_node.cpp
 )
 
-
-add_executable(bt_test src/bt_test.cpp)
-target_link_libraries(bt_test ${catkin_LIBRARIES})
-
-add_executable(bt_test_complex src/bt_test_complex.cpp)
-target_link_libraries(bt_test_complex ${catkin_LIBRARIES})
-
-#add_executable(bt_move_base_action_leaf_node src/bt_move_base_action_leaf_node.cpp)
-#target_link_libraries(bt_move_base_action_leaf_node ${catkin_LIBRARIES})
-
 add_executable(tree src/tree.cpp ${BT_NODES_SRC})
 target_link_libraries(tree ${catkin_LIBRARIES})
-
-add_executable(bb_test src/bb_test.cpp)
-target_link_libraries(bb_test ${catkin_LIBRARIES})
 
 #############
 ## Install ##

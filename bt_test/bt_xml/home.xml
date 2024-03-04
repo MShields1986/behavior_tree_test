@@ -1,0 +1,17 @@
+<root BTCPP_format="4" >
+  <BehaviorTree ID="Home">
+    <Sequence name="home_behavior">
+      <SetBlackboard output_key="base_home_loc" value="map;0;0;0;0;0;0;1" />
+      <SetBlackboard output_key="arm_home_loc_cartesian" value="iiwa_link_0;0;0;0;0;0;0;1" />
+      <!--<SetBlackboard output_key="arm_home_loc_joint" value="0;0;0;0;0;0;0" />-->
+      <Fallback name="base_to_home_fallback">
+        <CheckPose name="base_check_home" pose="{base_home_loc}"/>
+        <BaseToGoal name="base_to_home" pose="{base_home_loc}"/>
+      </Fallback>
+      <Fallback name="arm_to_home_fallback">
+        <CheckPose name="arm_check_home" pose="{arm_home_loc_cartesian}"/>
+        <!--<ArmToGoal name="arm_to_home" pose="{arm_home_loc_cartesian}"/>-->
+      </Fallback>
+    </Sequence>
+  </BehaviorTree>
+</root>

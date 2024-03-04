@@ -35,7 +35,7 @@ bool rot_ok(double a, double b)
 
 
 
-// Adapting a pre-existing function
+// CheckPose Condition Leaf Node
 BT::NodeStatus CheckPose(BT::TreeNode& self)
 {
     auto res = self.getInput<geometry_msgs::PoseStamped>("pose");
@@ -81,9 +81,7 @@ BT::NodeStatus CheckPose(BT::TreeNode& self)
 }
 
 
-
-// Human fallback sub-tree
-//   Action leaf node
+// Human Fallback Action Leaf Node
 class AskForHelp : public BT::SyncActionNode
 {
 public:
@@ -123,7 +121,10 @@ int main(int argc, char **argv)
   factory.registerNodeType<TfToPose>("TfToPose");
 
   // Create Tree
-  auto tree = factory.createTreeFromFile(file_path);
+  //auto tree = factory.createTreeFromFile(file_path);
+
+  factory.registerBehaviorTreeFromFile(file_path);
+  auto tree = factory.createTree("MainTree");
 
   // Create a logger
   BT::StdCoutLogger logger_cout(tree);
