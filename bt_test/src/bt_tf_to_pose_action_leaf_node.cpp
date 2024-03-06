@@ -32,7 +32,7 @@ BT::NodeStatus TfToPose::tick()
   try{
       m_transformStamped = m_tfBuffer.lookupTransform("map", m_frame_id, ros::Time(0), ros::Duration(3.0));
       }
-  catch (tf2::TransformException &ex) {
+  catch (tf2::TransformException& ex) {
       ROS_INFO_STREAM("TfToPose | could not find transform map to " + m_frame_id + ": " + ex.what());
       return BT::NodeStatus::FAILURE;
   }

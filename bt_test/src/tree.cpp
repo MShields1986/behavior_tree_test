@@ -12,6 +12,7 @@
 
 #include "bt_move_base_action_leaf_node.h"
 #include "bt_tf_to_pose_action_leaf_node.h"
+#include "bt_moveit_commander_plan_action_leaf_node.h"
 #include "posestamped_bb_parser.h"
 
 
@@ -115,10 +116,10 @@ int main(int argc, char **argv)
 
   // Register leaf nodes
   factory.registerNodeType<AskForHelp>("AskForHelp");
-  //factory.registerNodeType<CheckPose>("CheckPose");
   factory.registerSimpleCondition("CheckPose", CheckPose, ports);
   factory.registerNodeType<BaseToGoal>("BaseToGoal");
   factory.registerNodeType<TfToPose>("TfToPose");
+  factory.registerNodeType<MoveItCommanderPlanService>("MoveItCommanderPlanService");
 
   // Create Tree
   //auto tree = factory.createTreeFromFile(file_path);
