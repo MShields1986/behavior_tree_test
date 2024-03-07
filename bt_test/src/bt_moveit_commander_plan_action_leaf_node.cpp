@@ -33,7 +33,7 @@ BT::NodeStatus MoveItCommanderPlanService::tick()
   srv.request.topic_name = m_topic_name;
   if (client.call(srv))
   {
-    ROS_INFO("Service call successful: " + srv.response.success);
+    ROS_INFO_STREAM("Service call successful: " << std::noboolalpha << srv.response.success);
     return BT::NodeStatus::SUCCESS;
   }
   else
