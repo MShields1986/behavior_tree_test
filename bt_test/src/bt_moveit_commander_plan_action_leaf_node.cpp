@@ -33,12 +33,12 @@ BT::NodeStatus MoveItCommanderPlanService::tick()
   srv.request.topic_name = m_topic_name;
   if (client.call(srv))
   {
-    ROS_INFO(f"Service call successful: {srv.response.success}");
+    ROS_INFO("Service call successful: " + srv.response.success);
     return BT::NodeStatus::SUCCESS;
   }
   else
   {
     ROS_ERROR("Failed to call service /iiwa/moveit_plan");
-    return BT::NodeStatus::FAILURE
+    return BT::NodeStatus::FAILURE;
   }
 }

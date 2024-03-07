@@ -11,6 +11,7 @@ project(bt_test)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  noether_client
   behaviortree_cpp_v3
   move_base_msgs
   geometry_msgs
@@ -183,6 +184,9 @@ set(BT_NODES_SRC
 )
 
 add_executable(tree src/tree.cpp ${BT_NODES_SRC})
+
+add_dependencies(tree ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
 target_link_libraries(tree ${catkin_LIBRARIES})
 
 #############
