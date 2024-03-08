@@ -2,7 +2,7 @@
   <BehaviorTree ID="Home">
     <Sequence name="home_behavior">
       <!-- Set targets to the blackboard -->
-      <SetBlackboard output_key="base_home_loc" value="map;0;0;0;0;0;0;1"/>
+      <SetBlackboard output_key="base_home_loc" value="map;-0.8;-1.3;0;0;0;0.236;0.971"/>
       <SetBlackboard output_key="arm_drive_loc_joint_pos" value="50;-35;0;90;0;-60;0"/>
       <SetBlackboard output_key="arm_watch_loc_joint_pos" value="90;0;90;0;0;100;0"/>
       <!-- Put the arm in the drive position -->
@@ -11,12 +11,10 @@
         <IiwaToJointPosition name="arm_to_drive" joints="{arm_drive_loc_joint_pos}"/>
       </Fallback>
       <!-- Have the base navigate home -->
-      <!--
       <Fallback name="base_to_home_fallback">
         <CheckPose name="base_check_home" child_frame="base_link" pose="{base_home_loc}"/>
         <BaseToGoal name="base_to_home" pose="{base_home_loc}"/>
       </Fallback>
-      -->
       <!-- Put the arm in the fixture watching position -->
       <Fallback name="arm_to_watch_fallback">
         <!--<IiwaCheckJointPosition name="arm_check_watch" joints="{arm_watch_loc_joint_pos}"/>-->
