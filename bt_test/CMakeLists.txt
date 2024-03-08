@@ -11,6 +11,7 @@ project(bt_test)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  iiwa_msgs
   noether_client
   behaviortree_cpp_v3
   move_base_msgs
@@ -181,10 +182,13 @@ set(BT_NODES_SRC
     src/bt_move_base_action_leaf_node.cpp
     src/bt_tf_to_pose_action_leaf_node.cpp
     src/bt_moveit_commander_plan_action_leaf_node.cpp
+    src/bt_moveit_commander_exec_action_leaf_node.cpp
+    src/bt_iiwa_joint_cmd_action_leaf_node.cpp
 )
 
 add_executable(tree src/tree.cpp ${BT_NODES_SRC})
 
+# Needed to pull in external services and actions
 add_dependencies(tree ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(tree ${catkin_LIBRARIES})

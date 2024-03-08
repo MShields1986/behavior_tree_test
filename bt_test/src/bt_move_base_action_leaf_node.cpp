@@ -6,10 +6,10 @@ BaseToGoal::BaseToGoal(const std::string& name, const BT::NodeConfiguration& con
       BT::AsyncActionNode(name, config),
       _actionclient("/kmr/move_base", true)
 {
-  /*while(!_actionclient.waitForServer(ros::Duration(5.0)))
+  while(!_actionclient.waitForServer(ros::Duration(5.0)))
   {
     ROS_INFO_STREAM("Waiting for the move_base action server to come up");
-  }*/
+  }
   ROS_INFO_STREAM("BaseToGoal | move_base action server up");
 }
 

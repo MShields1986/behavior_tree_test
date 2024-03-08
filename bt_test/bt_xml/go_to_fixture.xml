@@ -2,8 +2,13 @@
   <BehaviorTree ID="GoToFixture">
     <Sequence name="go_to_fixture_behavior">
       <TfToPose name="tf_to_pose" frame_id="fixture_1" pose="{fixture_base_loc}"/>
+      <SetBlackboard output_key="arm_drive_loc_joint_pos" value="50;-35;0;90;0;-60;0"/>
+      <Fallback name="arm_to_drive_fallback">
+        <!--<IiwaCheckJointPosition name="arm_check_drive" joints="{arm_drive_loc_joint_pos}"/>-->
+        <IiwaToJointPosition name="arm_to_drive" joints="{arm_drive_loc_joint_pos}"/>
+      </Fallback>
       <Fallback name="base_to_fixture_fallback">
-        <CheckPose name="base_check_fixture" pose="{fixture_base_loc}"/>
+        <CheckPose name="base_check_fixture" child_frame="base_link" pose="{fixture_base_loc}"/>
         <BaseToGoal name="base_to_fixture" pose="{fixture_base_loc}"/>
       </Fallback>
     </Sequence>

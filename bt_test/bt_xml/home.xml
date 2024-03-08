@@ -1,16 +1,26 @@
 <root BTCPP_format="4" >
   <BehaviorTree ID="Home">
     <Sequence name="home_behavior">
-      <SetBlackboard output_key="base_home_loc" value="map;0;0;0;0;0;0;1" />
-      <SetBlackboard output_key="arm_home_loc_cartesian" value="iiwa_link_0;0;0;0;0;0;0;1" />
-      <!--<SetBlackboard output_key="arm_home_loc_joint" value="0;0;0;0;0;0;0" />-->
+      <!-- Set targets to the blackboard -->
+      <SetBlackboard output_key="base_home_loc" value="map;0;0;0;0;0;0;1"/>
+      <SetBlackboard output_key="arm_drive_loc_joint_pos" value="50;-35;0;90;0;-60;0"/>
+      <SetBlackboard output_key="arm_watch_loc_joint_pos" value="90;0;90;0;0;100;0"/>
+      <!-- Put the arm in the drive position -->
+      <Fallback name="arm_to_drive_fallback">
+        <!--<IiwaCheckJointPosition name="arm_check_drive" joints="{arm_drive_loc_joint_pos}"/>-->
+        <IiwaToJointPosition name="arm_to_drive" joints="{arm_drive_loc_joint_pos}"/>
+      </Fallback>
+      <!-- Have the base navigate home -->
+      <!--
       <Fallback name="base_to_home_fallback">
-        <CheckPose name="base_check_home" pose="{base_home_loc}"/>
+        <CheckPose name="base_check_home" child_frame="base_link" pose="{base_home_loc}"/>
         <BaseToGoal name="base_to_home" pose="{base_home_loc}"/>
       </Fallback>
-      <Fallback name="arm_to_home_fallback">
-        <CheckPose name="arm_check_home" pose="{arm_home_loc_cartesian}"/>
-        <!--<ArmToGoal name="arm_to_home" pose="{arm_home_loc_cartesian}"/>-->
+      -->
+      <!-- Put the arm in the fixture watching position -->
+      <Fallback name="arm_to_watch_fallback">
+        <!--<IiwaCheckJointPosition name="arm_check_watch" joints="{arm_watch_loc_joint_pos}"/>-->
+        <IiwaToJointPosition name="arm_to_watch" joints="{arm_watch_loc_joint_pos}"/>
       </Fallback>
     </Sequence>
   </BehaviorTree>

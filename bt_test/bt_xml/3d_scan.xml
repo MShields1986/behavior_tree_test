@@ -1,8 +1,10 @@
 <root BTCPP_format="4" >
   <BehaviorTree ID="3dScan">
     <Sequence name="3d_scan_behavior">
-      <PlanViews name="view_plan"/>
-      <ArmMoveItCommander name="arm_to_views" pose_array_topic_name="/planner_views"/>
+      <ViewPlan name="view_plan"/>
+      <MoveItCommanderPlanService name="plan_arm_to_views" pose_array_topic_name="/planner_views"/>
+      <!-- Maybe something here to have a person validate the plan-->
+      <MoveItCommanderExecuteService name="exec_arm_to_views"/>
     </Sequence>
   </BehaviorTree>
 </root>

@@ -1,4 +1,5 @@
 #include "chrono"
+#include "string"
 
 #include "ros/ros.h"
 #include "ros/package.h"
@@ -13,13 +14,17 @@
 #include "bt_move_base_action_leaf_node.h"
 #include "bt_tf_to_pose_action_leaf_node.h"
 #include "bt_moveit_commander_plan_action_leaf_node.h"
+#include "bt_moveit_commander_exec_action_leaf_node.h"
+#include "bt_iiwa_joint_cmd_action_leaf_node.h"
+
 #include "posestamped_bb_parser.h"
+#include "iiwajointposition_bb_parser.h"
 
 
 using namespace std::chrono_literals;
 
 
-
+// TODO: Get these in the param server
 const double max_pos_error = 0.01;
 const double max_rot_error = 0.044; // ~5 degs
 
@@ -39,14 +44,23 @@ bool rot_ok(double a, double b)
 // CheckPose Condition Leaf Node
 BT::NodeStatus CheckPose(BT::TreeNode& self)
 {
-    auto res = self.getInput<geometry_msgs::PoseStamped>("pose");
-    if( !res )
+    auto pose_res = self.getInput<geometry_msgs::PoseStamped>("pose");
+    if( !pose_res )
     {
-        throw BT::RuntimeError("CheckPose | error reading port [pose]:", res.error());
+        throw BT::RuntimeError("CheckPose | error reading port [pose]:", pose_res.error());
+        return BT::NodeStatus::FAILURE;
     }
 
-    geometry_msgs::PoseStamped pose = res.value();
-    ROS_INFO_STREAM("CheckPose | pose input: " << pose);
+    auto frame_res = self.getInput<std::string>("child_frame");
+    if( !frame_res )
+    {
+        throw BT::RuntimeError("CheckPose | error reading port [child_frame]:", frame_res.error());
+        return BT::NodeStatus::FAILURE;
+    }
+
+    geometry_msgs::PoseStamped pose = pose_res.value();
+    std::string child_frame = frame_res.value();
+    ROS_INFO_STREAM("CheckPose | child_frame: " << child_frame << "pose input: " << pose);
 
     // TODO: Be good to get the instantiation out of here
     tf2_ros::Buffer tfBuffer;
@@ -54,8 +68,8 @@ BT::NodeStatus CheckPose(BT::TreeNode& self)
     geometry_msgs::TransformStamped transformStamped;
 
     try{
-        transformStamped = tfBuffer.lookupTransform("map", "base_link", ros::Time(0), ros::Duration(3.0));
-        //transformStamped = tfBuffer.lookupTransform("map", "base_link", ros::Time::now(), ros::Duration(3.0));
+        transformStamped = tfBuffer.lookupTransform(pose.header.frame_id, child_frame, ros::Time(0), ros::Duration(3.0));
+        //transformStamped = tfBuffer.lookupTransform(pose.header.frame_id, child_frame, ros::Time::now(), ros::Duration(3.0));
 
         if (pose_ok(transformStamped.transform.translation.x, pose.pose.position.x) &&
             pose_ok(transformStamped.transform.translation.y, pose.pose.position.y) &&
@@ -75,7 +89,7 @@ BT::NodeStatus CheckPose(BT::TreeNode& self)
         }
     }
     catch (tf2::TransformException &ex) {
-        ROS_WARN("CheckPose | could not transform map to base_link: %s", ex.what());
+        ROS_WARN("CheckPose | could not look up required transform : %s", ex.what());
         return BT::NodeStatus::FAILURE;
     }
 
@@ -112,7 +126,10 @@ int main(int argc, char **argv)
 
   BT::BehaviorTreeFactory factory;
 
-  BT::PortsList ports = {BT::InputPort<geometry_msgs::PoseStamped>("pose")};
+  BT::PortsList ports = {
+    BT::InputPort<geometry_msgs::PoseStamped>("pose"),
+    BT::InputPort<geometry_msgs::PoseStamped>("child_frame")
+    };
 
   // Register leaf nodes
   factory.registerNodeType<AskForHelp>("AskForHelp");
@@ -120,6 +137,8 @@ int main(int argc, char **argv)
   factory.registerNodeType<BaseToGoal>("BaseToGoal");
   factory.registerNodeType<TfToPose>("TfToPose");
   factory.registerNodeType<MoveItCommanderPlanService>("MoveItCommanderPlanService");
+  factory.registerNodeType<MoveItCommanderExecuteService>("MoveItCommanderExecuteService");
+  factory.registerNodeType<IiwaToJointPosition>("IiwaToJointPosition");
 
   // Create Tree
   //auto tree = factory.createTreeFromFile(file_path);

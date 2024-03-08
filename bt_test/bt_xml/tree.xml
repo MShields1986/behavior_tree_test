@@ -7,9 +7,7 @@
     <Fallback name="root_fallback">
       <Sequence name="main_behavior">
         <SubTree ID="Home" />
-        <!--<SetBlackboard output_key="arm_home_loc_joint" value="0;0;0;0;0;0;0" />-->
-        <!--<ArmToGoal name="arm_to_transit" pose="{arm_transit_loc_joint}"/>-->
-        <SubTree ID="GoToFixture" />
+        <!--<SubTree ID="GoToFixture" />-->
         <!--<SubTree ID="3DScan" />-->
       </Sequence>
       <AskForHelp name="ask_for_help"/>
