@@ -7,8 +7,9 @@
     <Fallback name="root_fallback">
       <Sequence name="main_behavior">
         <SubTree ID="Home" />
-        <!--<SubTree ID="GoToFixture" />-->
+        <SubTree ID="GoToFixture" />
         <!--<SubTree ID="3DScan" />-->
+        <SubTree ID="Home" />
       </Sequence>
       <AskForHelp name="ask_for_help"/>
     </Fallback>
