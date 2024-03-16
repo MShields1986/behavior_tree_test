@@ -13,6 +13,7 @@ project(bt_test)
 find_package(catkin REQUIRED COMPONENTS
   iiwa_msgs
   noether_client
+  view_planner
   behaviortree_cpp_v3
   move_base_msgs
   geometry_msgs
@@ -191,8 +192,7 @@ set(BT_NODES_SRC
 add_executable(tree src/tree.cpp ${BT_NODES_SRC})
 
 # Needed to pull in external services and actions
-# add_dependencies(tree view_planner_generate_messages_cpp)
-# add_dependencies(tree noether_client_generate_messages_cpp)
+# Be sure to add the package to find_packages() and packages.xml
 add_dependencies(tree ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(tree ${catkin_LIBRARIES})
