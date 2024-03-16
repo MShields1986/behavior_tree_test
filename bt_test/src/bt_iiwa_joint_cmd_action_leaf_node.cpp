@@ -31,7 +31,7 @@ BT::NodeStatus IiwaToJointPosition::tick()
   m_pub = n.advertise<iiwa_msgs::JointPosition>("/iiwa/command/JointPosition", 1000, true);
   m_pub.publish(m_joints);
   ros::spinOnce();
-  // TODO: Consider instead of holding for 5 sec could hold until arm vel reaches zero
+  // TODO: Consider instead of holding for 4 sec could hold until arm vel reaches zero
   ros::Duration(4.0).sleep();
   return BT::NodeStatus::SUCCESS;
 }

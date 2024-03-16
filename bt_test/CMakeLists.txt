@@ -184,6 +184,7 @@ set(BT_NODES_SRC
     src/bt_moveit_commander_plan_action_leaf_node.cpp
     src/bt_moveit_commander_exec_action_leaf_node.cpp
     src/bt_iiwa_joint_cmd_action_leaf_node.cpp
+    src/bt_sleep_action_leaf_node.cpp
 )
 
 add_executable(tree src/tree.cpp ${BT_NODES_SRC})

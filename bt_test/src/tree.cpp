@@ -16,6 +16,7 @@
 #include "bt_moveit_commander_plan_action_leaf_node.h"
 #include "bt_moveit_commander_exec_action_leaf_node.h"
 #include "bt_iiwa_joint_cmd_action_leaf_node.h"
+#include "bt_sleep_action_leaf_node.h"
 
 #include "posestamped_bb_parser.h"
 #include "iiwajointposition_bb_parser.h"
@@ -139,6 +140,7 @@ int main(int argc, char **argv)
   factory.registerNodeType<MoveItCommanderPlanService>("MoveItCommanderPlanService");
   factory.registerNodeType<MoveItCommanderExecuteService>("MoveItCommanderExecuteService");
   factory.registerNodeType<IiwaToJointPosition>("IiwaToJointPosition");
+  factory.registerNodeType<Sleep>("Sleep");
 
   // Create Tree
   //auto tree = factory.createTreeFromFile(file_path);
