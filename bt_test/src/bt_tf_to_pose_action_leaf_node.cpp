@@ -29,8 +29,6 @@ BT::NodeStatus TfToPose::tick()
 
   m_frame_id = res.value();
 
-  ros::Duration(10.0).sleep();
-
   try{
       m_transformStamped = m_tfBuffer.lookupTransform("map", m_frame_id, ros::Time(0), ros::Duration(3.0));
       }

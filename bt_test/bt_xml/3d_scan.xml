@@ -2,8 +2,17 @@
   <BehaviorTree ID="3dScan">
     <Sequence name="3d_scan_behavior">
       <ViewPlan name="view_plan"/>
+      <!-- Set targets to the blackboard -->
+      <SetBlackboard output_key="arm_3d_scan_start_loc_joint_pos" value="0;-50;0;-115;0;35;0"/>
+      <!-- Put the arm in the drive position -->
+      <Fallback name="arm_3d_scan_start_fallback">
+        <!--<IiwaCheckJointPosition name="arm_check_3d_scan_start" joints="{arm_3d_scan_start_loc_joint_pos}"/>-->
+        <IiwaToJointPosition name="arm_to_3d_scan_start" joints="{arm_3d_scan_start_loc_joint_pos}"/>
+      </Fallback>
+      <!-- Plan the camera poses -->
       <MoveItCommanderPlanService name="plan_arm_to_views" pose_array_topic_name="/planner_views"/>
       <!-- Maybe something here to have a person validate the plan-->
+      <!-- Execute the camera poses -->
       <MoveItCommanderExecuteService name="exec_arm_to_views"/>
     </Sequence>
   </BehaviorTree>

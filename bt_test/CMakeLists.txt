@@ -162,7 +162,7 @@ include_directories(
 # )
 
 #####################################
-# Tests
+# Behavior Tests
 #####################################
 
 #add_executable(bt_test src/bt_test.cpp)
@@ -175,7 +175,7 @@ include_directories(
 #target_link_libraries(bb_test ${catkin_LIBRARIES})
 
 #####################################
-# Tree
+# KMR iiwa Behavior Tree
 #####################################
 
 set(BT_NODES_SRC
@@ -185,11 +185,14 @@ set(BT_NODES_SRC
     src/bt_moveit_commander_exec_action_leaf_node.cpp
     src/bt_iiwa_joint_cmd_action_leaf_node.cpp
     src/bt_sleep_action_leaf_node.cpp
+    src/bt_view_plan_action_leaf_node.cpp
 )
 
 add_executable(tree src/tree.cpp ${BT_NODES_SRC})
 
 # Needed to pull in external services and actions
+# add_dependencies(tree view_planner_generate_messages_cpp)
+# add_dependencies(tree noether_client_generate_messages_cpp)
 add_dependencies(tree ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(tree ${catkin_LIBRARIES})

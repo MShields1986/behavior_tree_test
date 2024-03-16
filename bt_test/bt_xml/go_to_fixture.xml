@@ -1,8 +1,9 @@
 <root BTCPP_format="4" >
   <BehaviorTree ID="GoToFixture">
     <Sequence name="go_to_fixture_behavior">
-      <!-- Put the arm in the fixture watching position -->
+      <!-- Set targets to the blackboard -->
       <SetBlackboard output_key="arm_watch_loc_joint_pos" value="90;0;90;0;0;100;0"/>
+      <!-- Put the arm in the fixture watching position -->
       <Fallback name="arm_to_watch_fallback">
         <!--<IiwaCheckJointPosition name="arm_check_watch" joints="{arm_watch_loc_joint_pos}"/>-->
         <IiwaToJointPosition name="arm_to_watch" joints="{arm_watch_loc_joint_pos}"/>

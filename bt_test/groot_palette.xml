@@ -11,6 +11,9 @@
             <input_port name="frame_id"/>
             <output_port name="pose"/>
         </Action>
+        <Action ID="Sleep">
+            <input_port name="sleep_time"/>
+        </Action>
     </TreeNodesModel>
 </root>
 
