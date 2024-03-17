@@ -1,14 +1,14 @@
 <root BTCPP_format="4" >
   <include path="./home.xml" />
   <include path="./go_to_fixture.xml" />
-  <!--<include path="./3d_scan.xml" />-->
+  <include path="./3d_scan.xml" />
 
   <BehaviorTree ID="MainTree">
     <Fallback name="root_fallback">
       <Sequence name="main_behavior">
         <SubTree ID="Home" />
         <SubTree ID="GoToFixture" />
-        <!--<SubTree ID="3DScan" />-->
+        <SubTree ID="3dScan" />
         <SubTree ID="Home" />
       </Sequence>
       <AskForHelp name="ask_for_help"/>

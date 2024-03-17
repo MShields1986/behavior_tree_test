@@ -17,10 +17,15 @@ class ViewPlan : public BT::SyncActionNode
     BT::NodeStatus tick() override;
 
   private:
-    std::string m_working_volume_origin;
-    float m_camera_standoff;
-    float m_points_x;
-    float m_points_y;
+    void processStringPort(std::string& port_value, const std::string& port_name);
+    void processFloatPort(float& port_value, const std::string& port_name);
+
+    view_planner::PlanViews srv_;
+    std::string service_name_;
+    std::string working_volume_origin_;
+    float camera_standoff_;
+    float points_x_;
+    float points_y_;
 
     //geometry_msgs::PoseArray m_view_poses;
 
