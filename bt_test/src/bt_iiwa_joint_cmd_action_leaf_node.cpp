@@ -2,43 +2,57 @@
 
 
 
-IiwaToJointPosition::IiwaToJointPosition(const std::string& name, const BT::NodeConfiguration& config) : 
-      BT::SyncActionNode(name, config)
+IiwaToJointPosition::IiwaToJointPosition(const std::string& name, const BT::NodeConfiguration& config)
+   : BT::SyncActionNode(name, config),
+     action_name_("/iiwa/action/move_to_joint_position"),
+     joint_position_client_(action_name_, true)
 {
+    ROS_INFO_STREAM("IiwaToJointPosition | Waiting for external action server " << action_name_ << " to start...");
+    joint_position_client_.waitForServer();
+
+    ROS_INFO_STREAM("IiwaToJointPosition | External action server " << action_name_ << " started");
 }
 
 
 BT::PortsList IiwaToJointPosition::providedPorts()
 {
-  return {BT::InputPort<iiwa_msgs::JointPosition>("joints")};
+    return {BT::InputPort<iiwa_msgs::JointPosition>("joints")};
 }
 
 
 BT::NodeStatus IiwaToJointPosition::tick()
 {
-  auto res = getInput<iiwa_msgs::JointPosition>("joints");
+    auto res = getInput<iiwa_msgs::JointPosition>("joints");
  
-  if( !res )
-  {
-    throw BT::RuntimeError("IiwaToJointPosition | error reading port [joints]:", res.error());
-    return BT::NodeStatus::FAILURE;
-  }
+    if( !res )
+    {
+      throw BT::RuntimeError("IiwaToJointPosition | error reading port [joints]:", res.error());
+      return BT::NodeStatus::FAILURE;
+    }
 
-  m_joints = res.value();
-  ROS_INFO_STREAM("IiwaToJointPosition | joints input: " << m_joints);
+    iiwa_msgs::MoveToJointPositionGoal joint_position_goal_;
+    joint_position_goal_.joint_position = res.value();
 
-  ros::NodeHandle n;
-  m_pub = n.advertise<iiwa_msgs::JointPosition>("/iiwa/command/JointPosition", 1000, true);
-  m_pub.publish(m_joints);
-  ros::spinOnce();
+    ROS_INFO_STREAM("IiwaToJointPosition | Sending goal");
+    joint_position_client_.sendGoal(joint_position_goal_);
+    ROS_INFO_STREAM("IiwaToJointPosition | Waiting 30 seconds for result...");
 
-  // TODO: Use the action server instead of publisher so you can wait for a result
-  // actionlib::SimpleActionClient<iiwa_msgs::MoveToJointPositionAction> jointPositionClient("/iiwa/action/move_to_joint_position", true);
-  // bool finished_before_timeout = jointPositionClient.waitForResult(ros::Duration(60.0));
-  // if (!finished_before_timeout) {
-  //     ROS_WARN("iiwa motion timed out - exiting...");
-  // }
+    bool finished_before_timeout = joint_position_client_.waitForResult(ros::Duration(30.0));
+    if (!finished_before_timeout)
+    {
+        ROS_WARN_STREAM("IiwaToJointPosition | Goal timed out");
+        return BT::NodeStatus::FAILURE;
+    }
 
-  ros::Duration(4.0).sleep();
-  return BT::NodeStatus::SUCCESS;
+    joint_position_client_.getResult();
+    if (joint_position_client_.getResult()->success)
+    {
+        ROS_INFO_STREAM("IiwaToJointPosition | Goal achieved");
+        return BT::NodeStatus::SUCCESS;
+    }
+    else
+    {
+        ROS_WARN_STREAM("IiwaToJointPosition | Goal failed");
+        return BT::NodeStatus::FAILURE;
+    }
 }
