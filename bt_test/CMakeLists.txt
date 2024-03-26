@@ -180,12 +180,14 @@ include_directories(
 #####################################
 
 set(BT_NODES_SRC
+    src/bt_iiwa_cartesian_cmd_action_leaf_node.cpp
+    src/bt_iiwa_cartesian_lin_cmd_action_leaf_node.cpp
+    src/bt_iiwa_joint_cmd_action_leaf_node.cpp
     src/bt_move_base_action_leaf_node.cpp
-    src/bt_tf_to_pose_action_leaf_node.cpp
     src/bt_moveit_commander_plan_action_leaf_node.cpp
     src/bt_moveit_commander_exec_action_leaf_node.cpp
-    src/bt_iiwa_joint_cmd_action_leaf_node.cpp
     src/bt_sleep_action_leaf_node.cpp
+    src/bt_tf_to_pose_action_leaf_node.cpp
     src/bt_view_plan_action_leaf_node.cpp
 )
 

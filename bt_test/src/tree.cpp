@@ -11,16 +11,18 @@
 #include "behaviortree_cpp_v3/loggers/bt_cout_logger.h"
 #include "behaviortree_cpp_v3/loggers/bt_zmq_publisher.h"
 
+#include "bt_iiwa_cartesian_cmd_action_leaf_node.h"
+#include "bt_iiwa_cartesian_lin_cmd_action_leaf_node.h"
+#include "bt_iiwa_joint_cmd_action_leaf_node.h"
 #include "bt_move_base_action_leaf_node.h"
-#include "bt_tf_to_pose_action_leaf_node.h"
 #include "bt_moveit_commander_plan_action_leaf_node.h"
 #include "bt_moveit_commander_exec_action_leaf_node.h"
-#include "bt_iiwa_joint_cmd_action_leaf_node.h"
 #include "bt_sleep_action_leaf_node.h"
+#include "bt_tf_to_pose_action_leaf_node.h"
 #include "bt_view_plan_action_leaf_node.h"
 
-#include "posestamped_bb_parser.h"
 #include "iiwajointposition_bb_parser.h"
+#include "posestamped_bb_parser.h"
 
 
 using namespace std::chrono_literals;
@@ -140,6 +142,8 @@ int main(int argc, char **argv)
   factory.registerNodeType<TfToPose>("TfToPose");
   factory.registerNodeType<MoveItCommanderPlanService>("MoveItCommanderPlanService");
   factory.registerNodeType<MoveItCommanderExecuteService>("MoveItCommanderExecuteService");
+  factory.registerNodeType<IiwaToCartesianPosition>("IiwaToCartesianPosition");
+  factory.registerNodeType<IiwaToCartesianLinPosition>("IiwaToCartesianLinPosition");
   factory.registerNodeType<IiwaToJointPosition>("IiwaToJointPosition");
   factory.registerNodeType<Sleep>("Sleep");
   factory.registerNodeType<ViewPlan>("ViewPlan");
