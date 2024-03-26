@@ -116,7 +116,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS include
-  LIBRARIES bt_test
+#  LIBRARIES bt_test
   CATKIN_DEPENDS behaviortree_cpp_v3 move_base_msgs geometry_msgs nav_msgs std_msgs tf2_ros actionlib roscpp rospy
 #  DEPENDS system_lib
 )
