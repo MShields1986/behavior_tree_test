@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <arg name="configuration" default="default.yaml" />
+    <rosparam file="$(find bt_test)/config/$(arg configuration)" command="load" />
+
+    <node pkg="bt_test" type="tree" name="behavior_tree" output="screen"/>
+
+</launch>

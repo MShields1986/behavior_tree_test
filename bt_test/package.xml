@@ -50,6 +50,7 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>iiwa_msgs</build_depend>
+  <build_depend>fixture_tracker</build_depend>
   <build_depend>view_planner</build_depend>
   <build_depend>noether_client</build_depend>
   <build_depend>behaviortree_cpp_v3</build_depend>
@@ -62,6 +63,7 @@
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_export_depend>iiwa_msgs</build_export_depend>
+  <build_export_depend>fixture_tracker</build_export_depend>
   <build_export_depend>view_planner</build_export_depend>
   <build_export_depend>noether_client</build_export_depend>
   <build_export_depend>behaviortree_cpp_v3</build_export_depend>
@@ -74,6 +76,7 @@
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
   <exec_depend>iiwa_msgs</exec_depend>
+  <exec_depend>fixture_tracker</exec_depend>
   <exec_depend>view_planner</exec_depend>
   <exec_depend>noether_client</exec_depend>
   <exec_depend>behaviortree_cpp_v3</exec_depend>

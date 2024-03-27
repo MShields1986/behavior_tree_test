@@ -19,6 +19,7 @@
 #include "bt_moveit_commander_exec_action_leaf_node.h"
 #include "bt_sleep_action_leaf_node.h"
 #include "bt_tf_to_pose_action_leaf_node.h"
+#include "bt_update_all_fixture_locations_action_leaf_node.h"
 #include "bt_view_plan_action_leaf_node.h"
 
 #include "iiwajointposition_bb_parser.h"
@@ -123,8 +124,15 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "bt_test");
   ros::NodeHandle nh;
 
+  std::string file;
+  while (!nh.hasParam("/bt_file"))
+  {
+    ROS_INFO_STREAM_THROTTLE(10, "Waiting for parameter /bt_file");
+  }
+  nh.getParam("/bt_file", file);
+  ROS_INFO_STREAM("Read in parameter /bt_file = " << file);
+
   std::string package_path(ros::package::getPath("bt_test"));
-  std::string file("tree.xml");
   std::string file_path(package_path + "/bt_xml/" + file);
   ROS_INFO_STREAM("BT XML Path: " << file_path);
 
@@ -138,15 +146,20 @@ int main(int argc, char **argv)
   // Register leaf nodes
   factory.registerNodeType<AskForHelp>("AskForHelp");
   factory.registerSimpleCondition("CheckPose", CheckPose, ports);
+  factory.registerNodeType<Sleep>("Sleep");
+  
   factory.registerNodeType<BaseToGoal>("BaseToGoal");
   factory.registerNodeType<TfToPose>("TfToPose");
+
+  factory.registerNodeType<UpdateAllFixtureLocations>("UpdateAllFixtureLocations");
+  factory.registerNodeType<ViewPlan>("ViewPlan");
+  
   factory.registerNodeType<MoveItCommanderPlanService>("MoveItCommanderPlanService");
   factory.registerNodeType<MoveItCommanderExecuteService>("MoveItCommanderExecuteService");
+
   factory.registerNodeType<IiwaToCartesianPosition>("IiwaToCartesianPosition");
   factory.registerNodeType<IiwaToCartesianLinPosition>("IiwaToCartesianLinPosition");
   factory.registerNodeType<IiwaToJointPosition>("IiwaToJointPosition");
-  factory.registerNodeType<Sleep>("Sleep");
-  factory.registerNodeType<ViewPlan>("ViewPlan");
 
   // Create Tree
   //auto tree = factory.createTreeFromFile(file_path);

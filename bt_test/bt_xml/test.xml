@@ -1,0 +1,14 @@
+<root BTCPP_format="4" >
+  <BehaviorTree ID="MainTree">
+    <Sequence name="go_to_fixture_behavior">
+      <Sleep name="watch_for_fixture_1" sleep_time="10.0"/>
+      <UpdateAllFixtureLocations name="update_fixture_locations_1" service_name="/update_fixture_poses"/>
+      <Sleep name="watch_for_fixture_2" sleep_time="10.0"/>
+      <UpdateAllFixtureLocations name="update_fixture_locations_2" service_name="/update_fixture_poses"/>
+      <Sleep name="watch_for_fixture_3" sleep_time="10.0"/>
+      <UpdateAllFixtureLocations name="update_fixture_locations_3" service_name="/update_fixture_poses"/>
+      <Sleep name="watch_for_fixture_4" sleep_time="10.0"/>
+      <UpdateAllFixtureLocations name="update_fixture_locations_4" service_name="/update_fixture_poses"/>
+    </Sequence>
+  </BehaviorTree>
+</root>

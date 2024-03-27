@@ -13,6 +13,7 @@ project(bt_test)
 find_package(catkin REQUIRED COMPONENTS
   iiwa_msgs
   noether_client
+  fixture_tracker
   view_planner
   behaviortree_cpp_v3
   move_base_msgs
@@ -188,6 +189,7 @@ set(BT_NODES_SRC
     src/bt_moveit_commander_exec_action_leaf_node.cpp
     src/bt_sleep_action_leaf_node.cpp
     src/bt_tf_to_pose_action_leaf_node.cpp
+    src/bt_update_all_fixture_locations_action_leaf_node.cpp
     src/bt_view_plan_action_leaf_node.cpp
 )
 
