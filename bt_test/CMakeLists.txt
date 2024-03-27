@@ -12,6 +12,7 @@ project(bt_test)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   iiwa_msgs
+  iiwa_handler
   noether_client
   fixture_tracker
   view_planner

@@ -12,20 +12,19 @@
         points_y="10">
       </ViewPlan>
       <Sleep name="wait_for_view_plan" sleep_time="10.0"/>
-      <!-- Put the arm in the drive position -->
+      <!-- Put the arm in position ready for 3D scanning -->
       <Fallback name="arm_3d_scan_start_fallback">
         <!--<IiwaCheckJointPosition name="arm_check_3d_scan_start" joints="{arm_3d_scan_start_loc_joint_pos}"/>-->
         <IiwaToJointPosition name="arm_to_3d_scan_start" joints="{arm_3d_scan_start_loc_joint_pos}"/>
       </Fallback>
-      <!-- Plan the camera poses -->
       <!-- Initial attempt using MoveIt -->
-      <MoveItCommanderPlanService name="plan_arm_to_views" pose_array_topic_name="/view_planner/planned_views"/>
+      <!--<MoveItCommanderPlanService name="plan_arm_to_views" pose_array_topic_name="/view_planner/planned_views"/>-->
       <!-- Maybe something here to have a person validate the plan-->
       <!--<Sleep name="wait_for_motion_plan" sleep_time="30.0"/>-->
       <!-- Execute the camera poses -->
       <!--<MoveItCommanderExecuteService name="exec_arm_to_views"/>-->
       <!-- Using KUKA SmartServo -->
-      <!-- TODO -->
+      <IiiwaHandlerSplineMotionAction name="execute_3d_scan" pose_array_topic_name="/view_planner/planned_views"/>
     </Sequence>
   </BehaviorTree>
 </root>

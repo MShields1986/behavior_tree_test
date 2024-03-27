@@ -11,6 +11,7 @@
 #include "behaviortree_cpp_v3/loggers/bt_cout_logger.h"
 #include "behaviortree_cpp_v3/loggers/bt_zmq_publisher.h"
 
+#include "bt_iiwa_handler_spline_motion_action_leaf_node.h"
 #include "bt_iiwa_cartesian_cmd_action_leaf_node.h"
 #include "bt_iiwa_cartesian_lin_cmd_action_leaf_node.h"
 #include "bt_iiwa_joint_cmd_action_leaf_node.h"
@@ -156,6 +157,8 @@ int main(int argc, char **argv)
   
   factory.registerNodeType<MoveItCommanderPlanService>("MoveItCommanderPlanService");
   factory.registerNodeType<MoveItCommanderExecuteService>("MoveItCommanderExecuteService");
+
+  factory.registerNodeType<IiiwaHandlerSplineMotionAction>("IiiwaHandlerSplineMotionAction");
 
   factory.registerNodeType<IiwaToCartesianPosition>("IiwaToCartesianPosition");
   factory.registerNodeType<IiwaToCartesianLinPosition>("IiwaToCartesianLinPosition");
