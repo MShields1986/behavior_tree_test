@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ros/ros.h"
+#include "actionlib/client/simple_action_client.h"
+
 #include "iiwa_handler/PoseArrayInputAction.h"
 
 #include "behaviortree_cpp_v3/action_node.h"

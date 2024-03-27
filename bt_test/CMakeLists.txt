@@ -119,7 +119,21 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES bt_test
-  CATKIN_DEPENDS behaviortree_cpp_v3 move_base_msgs geometry_msgs nav_msgs std_msgs tf2_ros actionlib roscpp rospy
+  CATKIN_DEPENDS
+  iiwa_msgs
+  iiwa_handler
+  noether_client
+  fixture_tracker
+  view_planner
+  behaviortree_cpp_v3
+  move_base_msgs
+  geometry_msgs
+  nav_msgs
+  std_msgs
+  tf2_ros
+  actionlib
+  roscpp
+  rospy
 #  DEPENDS system_lib
 )
 
@@ -184,6 +198,7 @@ include_directories(
 set(BT_NODES_SRC
     src/bt_iiwa_cartesian_cmd_action_leaf_node.cpp
     src/bt_iiwa_cartesian_lin_cmd_action_leaf_node.cpp
+    src/bt_iiwa_handler_spline_motion_action_leaf_node.cpp
     src/bt_iiwa_joint_cmd_action_leaf_node.cpp
     src/bt_move_base_action_leaf_node.cpp
     src/bt_moveit_commander_plan_action_leaf_node.cpp
