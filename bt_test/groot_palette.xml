@@ -1,19 +1,42 @@
 <root>
     <TreeNodesModel>
         <Action ID="AskForHelp"/>
-        <Action ID="BaseToGoal">
-            <input_port name="pose"/>
-        </Action>
         <Condition ID="CheckPose">
             <input_port name="pose"/>
         </Condition>
+        <Action ID="Sleep">
+            <input_port name="sleep_time"/>
+        </Action>
+
+        <Action ID="BaseToGoal">
+            <input_port name="pose"/>
+        </Action>
         <Action ID="TfToPose">
             <input_port name="frame_id"/>
             <output_port name="pose"/>
         </Action>
-        <Action ID="Sleep">
-            <input_port name="sleep_time"/>
+        <Action ID="UpdateAllFixtureLocations">
+            <input_port name="service_name"/>
+        </Action>
+        <Action ID="ViewPlan">
+            <input_port name="service_name"/>
+            <input_port name="working_volume_origin"/>
+            <input_port name="camera_standoff"/>
+            <input_port name="points_x"/>
+            <input_port name="points_y"/>
+        </Action>
+        <Action ID="MoveItCommanderPlanService">
+            <input_port name="pose_array_topic_name"/>
+        </Action>
+        <Action ID="MoveItCommanderExecuteService"/>
+        <Action ID="IiwaToCartesianPosition">
+            <input_port name="pose"/>
+        </Action>
+        <Action ID="IiwaToCartesianLinPosition">
+            <input_port name="pose"/>
+        </Action>
+        <Action ID="IiwaToJointPosition">
+            <input_port name="joints"/>
         </Action>
     </TreeNodesModel>
 </root>
-
