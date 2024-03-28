@@ -8,8 +8,9 @@
         <!--<IiwaCheckJointPosition name="arm_check_watch" joints="{arm_watch_loc_joint_pos}"/>-->
         <IiwaToJointPosition name="arm_to_watch" joints="{arm_watch_loc_joint_pos}"/>
       </Fallback>
-      <Sleep name="watch_for_fixture" sleep_time="3.0"/>
+      <Sleep name="watch_for_tag_detection" sleep_time="5.0"/>
       <UpdateAllFixtureLocations name="update_fixture_locations" service_name="/update_fixture_poses"/>
+      <Sleep name="watch_for_fixture_update" sleep_time="2.0"/>
       <TfToPose name="tf_to_pose" frame_id="fixture_1_scanning_loc" pose="{fixture_base_loc}"/>
       <SetBlackboard output_key="arm_drive_loc_joint_pos" value="50;-35;0;90;0;-60;0"/>
       <Fallback name="arm_to_drive_fallback">

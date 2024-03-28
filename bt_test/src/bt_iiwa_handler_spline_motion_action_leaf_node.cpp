@@ -4,7 +4,7 @@
 IiiwaHandlerSplineMotionAction::IiiwaHandlerSplineMotionAction(const std::string& name, const BT::NodeConfiguration& config)
      : 
       BT::SyncActionNode(name, config),
-      spline_motion_client_("/iiwa/action/move_along_spline", true)
+      spline_motion_client_("/iiwa_handler/pose_array_to_move_along_spline", true)
 {
 }
 

@@ -2,21 +2,22 @@
   <BehaviorTree ID="3dScan">
     <Sequence name="3d_scan_behavior">
       <!-- Set targets to the blackboard -->
-      <SetBlackboard output_key="arm_3d_scan_start_loc_joint_pos" value="0;35;0;-90;0;-35;0"/>
+      <SetBlackboard output_key="arm_3d_scan_start_loc_joint_pos" value="90;35;0;-90;0;-35;0"/>
       <!-- Plan camera poses -->
       <ViewPlan name="view_plan"
         service_name="/view_planner/plan_views"
         working_volume_origin="pcl_crop_box_1"
-        camera_standoff="0.55"
+        camera_standoff="0.85"
         points_x="10"
         points_y="10">
       </ViewPlan>
-      <Sleep name="wait_for_view_plan" sleep_time="10.0"/>
+      <Sleep name="wait_for_view_plan" sleep_time="5.0"/>
       <!-- Put the arm in position ready for 3D scanning -->
       <Fallback name="arm_3d_scan_start_fallback">
         <!--<IiwaCheckJointPosition name="arm_check_3d_scan_start" joints="{arm_3d_scan_start_loc_joint_pos}"/>-->
         <IiwaToJointPosition name="arm_to_3d_scan_start" joints="{arm_3d_scan_start_loc_joint_pos}"/>
       </Fallback>
+      <Sleep name="wait_for_arm" sleep_time="5.0"/>
       <!-- Initial attempt using MoveIt -->
       <!--<MoveItCommanderPlanService name="plan_arm_to_views" pose_array_topic_name="/view_planner/planned_views"/>-->
       <!-- Maybe something here to have a person validate the plan-->
