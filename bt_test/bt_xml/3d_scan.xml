@@ -7,7 +7,7 @@
       <ViewPlan name="view_plan"
         service_name="/view_planner/plan_views"
         working_volume_origin="pcl_crop_box_1"
-        camera_standoff="0.85"
+        camera_standoff="0.825"
         points_x="10"
         points_y="10">
       </ViewPlan>
