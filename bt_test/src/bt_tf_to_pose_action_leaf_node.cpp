@@ -3,7 +3,7 @@
 
 TfToPose::TfToPose(const std::string& name, const BT::NodeConfiguration& config) : 
       BT::SyncActionNode(name, config),
-      m_tfListener(m_tfBuffer)
+      tfListener_(tfBuffer_)
 {
 }
 
@@ -27,26 +27,26 @@ BT::NodeStatus TfToPose::tick()
     return BT::NodeStatus::FAILURE;
   }
 
-  m_frame_id = res.value();
+  frame_id_ = res.value();
 
   try{
-      m_transformStamped = m_tfBuffer.lookupTransform("map", m_frame_id, ros::Time(0), ros::Duration(3.0));
+      transformStamped_ = tfBuffer_.lookupTransform("map", frame_id_, ros::Time(0), ros::Duration(3.0));
       }
   catch (tf2::TransformException& ex) {
-      ROS_INFO_STREAM("TfToPose | could not find transform map to " + m_frame_id + ": " + ex.what());
+      ROS_INFO_STREAM("TfToPose | could not find transform map to " + frame_id_ + ": " + ex.what());
       return BT::NodeStatus::FAILURE;
   }
 
   geometry_msgs::PoseStamped pose;
   //pose.header.stamp           = ros::Time::now();
   pose.header.frame_id        = "map";
-  pose.pose.position.x        = m_transformStamped.transform.translation.x;
-  pose.pose.position.y        = m_transformStamped.transform.translation.y;
-  pose.pose.position.z        = m_transformStamped.transform.translation.z;
-  pose.pose.orientation.x     = m_transformStamped.transform.rotation.x;
-  pose.pose.orientation.y     = m_transformStamped.transform.rotation.y;
-  pose.pose.orientation.z     = m_transformStamped.transform.rotation.z;
-  pose.pose.orientation.w     = m_transformStamped.transform.rotation.w;
+  pose.pose.position.x        = transformStamped_.transform.translation.x;
+  pose.pose.position.y        = transformStamped_.transform.translation.y;
+  pose.pose.position.z        = transformStamped_.transform.translation.z;
+  pose.pose.orientation.x     = transformStamped_.transform.rotation.x;
+  pose.pose.orientation.y     = transformStamped_.transform.rotation.y;
+  pose.pose.orientation.z     = transformStamped_.transform.rotation.z;
+  pose.pose.orientation.w     = transformStamped_.transform.rotation.w;
 
   setOutput<geometry_msgs::PoseStamped>("pose", pose);
   ROS_INFO_STREAM("TfToPose | pose output: " << pose);

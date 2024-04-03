@@ -25,12 +25,12 @@ BT::NodeStatus MoveItCommanderPlanService::tick()
     return BT::NodeStatus::FAILURE;
   }
 
-  m_topic_name = res.value();
+  topic_name_ = res.value();
 
   ros::NodeHandle n;
   ros::ServiceClient client = n.serviceClient<noether_client::MoveItPlan>("/iiwa/moveit_plan");
   noether_client::MoveItPlan srv;
-  srv.request.topic_name = m_topic_name;
+  srv.request.topic_name = topic_name_;
   if (client.call(srv))
   {
     ROS_INFO_STREAM("Service call successful: " << std::noboolalpha << srv.response.success);

@@ -19,8 +19,8 @@ class TfToPose : public BT::SyncActionNode
     BT::NodeStatus tick() override;
 
   private:
-    std::string m_frame_id;
-    tf2_ros::Buffer m_tfBuffer;
-    tf2_ros::TransformListener m_tfListener;
-    geometry_msgs::TransformStamped m_transformStamped;
+    std::string frame_id_;
+    tf2_ros::Buffer tfBuffer_;
+    tf2_ros::TransformListener tfListener_;
+    geometry_msgs::TransformStamped transformStamped_;
 };

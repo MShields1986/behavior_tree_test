@@ -15,5 +15,5 @@ class MoveItCommanderPlanService : public BT::SyncActionNode
     BT::NodeStatus tick() override;
 
   private:
-    std::string m_topic_name;
+    std::string topic_name_;
 };

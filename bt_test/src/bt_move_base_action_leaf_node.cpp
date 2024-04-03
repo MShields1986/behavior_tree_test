@@ -4,7 +4,7 @@
 
 BaseToGoal::BaseToGoal(const std::string& name, const BT::NodeConfiguration& config) : 
       BT::AsyncActionNode(name, config),
-      _actionclient("/kmr/move_base", true)
+      actionclient_("/kmr/move_base", true)
 {
   /*
   while(!_actionclient.waitForServer(ros::Duration(5.0)))
@@ -23,19 +23,19 @@ BT::PortsList BaseToGoal::providedPorts()
 
 void BaseToGoal::setGoal()
 {
-  m_goal.target_pose.header.frame_id = m_pose.header.frame_id;
-  m_goal.target_pose.header.stamp = ros::Time::now();
-  m_goal.target_pose.pose.position.x = m_pose.pose.position.x;
-  m_goal.target_pose.pose.position.y = m_pose.pose.position.y;
-  m_goal.target_pose.pose.orientation.z = m_pose.pose.orientation.z;
-  m_goal.target_pose.pose.orientation.w = m_pose.pose.orientation.w;
-  ROS_INFO_STREAM("BaseToGoal | goal set to " << m_goal.target_pose);
+  goal_.target_pose.header.frame_id = pose_.header.frame_id;
+  goal_.target_pose.header.stamp = ros::Time::now();
+  goal_.target_pose.pose.position.x = pose_.pose.position.x;
+  goal_.target_pose.pose.position.y = pose_.pose.position.y;
+  goal_.target_pose.pose.orientation.z = pose_.pose.orientation.z;
+  goal_.target_pose.pose.orientation.w = pose_.pose.orientation.w;
+  //ROS_INFO_STREAM("BaseToGoal | goal set to " << goal_.target_pose);
 }
 
 
 void BaseToGoal::haltGoal()
   {
-    _actionclient.cancelGoal();
+    actionclient_.cancelGoal();
     ROS_INFO_STREAM("BaseToGoal | move_base goal cancelled");
   }
 
@@ -43,13 +43,13 @@ void BaseToGoal::haltGoal()
 BT::NodeStatus BaseToGoal::sendGoal()
   {
     ROS_INFO_STREAM("BaseToGoal | sending goal");
-    _actionclient.sendGoal(m_goal);
-    //_actionclient.sendGoal(m_goal, &doneCb, &activeCb, &feedbackCb);
+    actionclient_.sendGoal(goal_);
+    //_actionclient.sendGoal(goal_, &doneCb, &activeCb, &feedbackCb);
     ROS_INFO_STREAM("BaseToGoal | goal sent");
 
-    _actionclient.waitForResult();
+    actionclient_.waitForResult();
 
-    if (_actionclient.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
+    if (actionclient_.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
       ROS_INFO_STREAM("BaseToGoal | move_base goal succeeded");
       return BT::NodeStatus::SUCCESS;
     } else {
@@ -76,8 +76,8 @@ BT::NodeStatus BaseToGoal::tick()
     return BT::NodeStatus::FAILURE;
   }
 
-  m_pose = res.value();
-  ROS_INFO_STREAM("BaseToGoal | pose input: " << m_pose);
+  pose_ = res.value();
+  //ROS_INFO_STREAM("BaseToGoal | pose input: " << pose_);
 
   setGoal();
   return sendGoal();

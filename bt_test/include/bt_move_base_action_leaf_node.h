@@ -25,8 +25,8 @@ class BaseToGoal : public BT::AsyncActionNode
     BT::NodeStatus sendGoal();
 
   private:
-    geometry_msgs::PoseStamped m_pose;
-    MoveBaseClient _actionclient;
-    move_base_msgs::MoveBaseGoal m_goal;
+    geometry_msgs::PoseStamped pose_;
+    MoveBaseClient actionclient_;
+    move_base_msgs::MoveBaseGoal goal_;
 
 };

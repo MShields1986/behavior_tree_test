@@ -14,6 +14,6 @@ class Sleep : public BT::SyncActionNode
     BT::NodeStatus tick() override;
 
   private:
-    double m_sleep_time;
+    double sleep_time_;
 
 };

@@ -26,8 +26,8 @@ BT::NodeStatus Sleep::tick()
     return BT::NodeStatus::FAILURE;
   }
 
-  m_sleep_time = res.value();
-  ROS_INFO_STREAM("Sleep | sleeping for " << m_sleep_time << " seconds");
-  ros::Duration(m_sleep_time).sleep();
+  sleep_time_ = res.value();
+  ROS_INFO_STREAM("Sleep | sleeping for " << sleep_time_ << " seconds");
+  ros::Duration(sleep_time_).sleep();
   return BT::NodeStatus::SUCCESS;
 }
